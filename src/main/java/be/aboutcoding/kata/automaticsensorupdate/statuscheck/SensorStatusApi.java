@@ -28,21 +28,10 @@ public class SensorStatusApi {
 
     @PostMapping
     public List<SensorStatus> getStatusFor(@RequestParam("file")MultipartFile file) {
-        try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8));
-             CSVParser csvParser = new CSVParser(fileReader,
-                     CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim());) {
-
-            Iterable<CSVRecord> csvRecords = csvParser.getRecords();
-
-            for (CSVRecord csvRecord : csvRecords) {
-                log.info("Id: {}", Long.parseLong(csvRecord.get("Id")));
-            }
-
-        } catch (IOException e) {
-            throw new RuntimeException("fail to parse CSV file: " + e.getMessage());
-        }
-
-        return null;
+        var sensors =  statusCheck.start(file);
+        return sensors.stream()
+                .map(SensorStatus::from)
+                .toList();
     }
 
 }

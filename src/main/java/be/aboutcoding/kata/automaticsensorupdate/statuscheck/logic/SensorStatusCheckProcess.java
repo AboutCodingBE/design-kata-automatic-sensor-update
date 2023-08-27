@@ -10,12 +10,12 @@ import java.util.List;
 @Component
 public class SensorStatusCheckProcess {
 
-    private final SensorRepository sensorRepository;
-    private final TaskRepository taskRepository;
+    private final SensorInformationClient sensor;
+    private final TaskClient taskClient;
 
-    public SensorStatusCheckProcess(SensorRepository sensorRepository, TaskRepository taskRepository) {
-        this.sensorRepository = sensorRepository;
-        this.taskRepository = taskRepository;
+    public SensorStatusCheckProcess(SensorInformationClient sensor, TaskClient taskClient) {
+        this.sensor = sensor;
+        this.taskClient = taskClient;
     }
 
     public List<TS50X> start(MultipartFile file) {
@@ -24,12 +24,12 @@ public class SensorStatusCheckProcess {
         var ids = parser.apply(file);
 
         //Step 2: get actual sensor information for the following ids
-        var targetSensors = sensorRepository.getSensorsWithIdIn(ids);
+        var targetSensors = sensor.getSensorsWithIdIn(ids);
 
         //Step 2: update the sensor firmware if necessary
         for (var sensor : targetSensors) {
             if (!sensor.hasValidFirmware()) {
-                taskRepository.scheduleFirmwareUpdateFor(sensor.getId());
+                taskClient.scheduleFirmwareUpdateFor(sensor.getId());
                 sensor.setStatus(ShippingStatus.UPDATING_FIRMWARE);
             }
         }
@@ -37,7 +37,7 @@ public class SensorStatusCheckProcess {
         //Step 4: update the sensor configuration if necessary or possible
         for (var sensor : targetSensors) {
             if (!sensor.isUpdatingFirmware() && !sensor.hasLatestConfiguration()) {
-                taskRepository.scheduleConfigurationUpdateFor(sensor.getId());
+                taskClient.scheduleConfigurationUpdateFor(sensor.getId());
                 sensor.setStatus(ShippingStatus.UPDATING_CONFIGURATION);
             }
         }

@@ -1,7 +1,7 @@
-package be.aboutcoding.kata.automaticsensorupdate.statuscheck.infrastructure;
+package be.aboutcoding.kata.automaticsensorupdate.statuscheck.logic;
 
 import be.aboutcoding.kata.automaticsensorupdate.statuscheck.domain.TS50X;
-import be.aboutcoding.kata.automaticsensorupdate.statuscheck.logic.SensorRepository;
+import be.aboutcoding.kata.automaticsensorupdate.statuscheck.infrastructure.Sensorinformation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 @Component
 @Slf4j
-public class SensorInformationClient implements SensorRepository {
+class SensorInformationClient {
 
     private final RestTemplate restTemplate;
 
@@ -22,7 +22,6 @@ public class SensorInformationClient implements SensorRepository {
         this.restTemplate = templateBuilder.rootUri(baseUrl).build();
     }
 
-    @Override
     public List<TS50X> getSensorsWithIdIn(List<Long> ids) {
         return ids.stream()
                 .map(this::getInformationFor)

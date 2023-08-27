@@ -5,7 +5,7 @@ import be.aboutcoding.kata.automaticsensorupdate.statuscheck.domain.TS50X;
 import java.util.List;
 
 /**
- * A little bit over engineered for what the project really is. It serves as a demonstration of text book Dependency Inversion
+ * A little overengineered for what the project really is. It serves as a demonstration of text book Dependency Inversion
  */
 public interface SensorRepository {
 

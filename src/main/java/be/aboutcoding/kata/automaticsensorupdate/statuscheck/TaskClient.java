@@ -1,6 +1,5 @@
-package be.aboutcoding.kata.automaticsensorupdate.statuscheck.infrastructure;
+package be.aboutcoding.kata.automaticsensorupdate.statuscheck;
 
-import be.aboutcoding.kata.automaticsensorupdate.statuscheck.logic.TaskRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -9,7 +8,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Component
 @Slf4j
-public class TaskClient implements TaskRepository {
+public class TaskClient {
 
     private RestTemplate restTemplate;
 
@@ -17,7 +16,6 @@ public class TaskClient implements TaskRepository {
         this.restTemplate = templateBuilder.rootUri(baseUrl).build();
     }
 
-    @Override
     public void scheduleFirmwareUpdateFor(Long id) {
         var response = restTemplate.postForEntity("/task", Task.createFirmwareUpdateTaskFor(id), Long.class);
         if (response.getStatusCode().is5xxServerError()) {
@@ -25,7 +23,6 @@ public class TaskClient implements TaskRepository {
         }
     }
 
-    @Override
     public void scheduleConfigurationUpdateFor(Long id) {
         var response = restTemplate.postForEntity("/task", Task.createConfigUpdateTaskFor(id), Long.class);
         if (response.getStatusCode().is5xxServerError()) {

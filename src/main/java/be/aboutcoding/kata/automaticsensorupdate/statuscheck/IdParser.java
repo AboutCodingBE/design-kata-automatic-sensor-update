@@ -1,4 +1,4 @@
-package be.aboutcoding.kata.automaticsensorupdate.statuscheck.logic;
+package be.aboutcoding.kata.automaticsensorupdate.statuscheck;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVFormat;

@@ -1,4 +1,4 @@
-package be.aboutcoding.kata.automaticsensorupdate.statuscheck.domain;
+package be.aboutcoding.kata.automaticsensorupdate.statuscheck;
 
 import lombok.Getter;
 import lombok.Setter;

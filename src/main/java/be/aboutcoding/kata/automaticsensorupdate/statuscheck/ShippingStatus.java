@@ -1,4 +1,4 @@
-package be.aboutcoding.kata.automaticsensorupdate.statuscheck.domain;
+package be.aboutcoding.kata.automaticsensorupdate.statuscheck;
 
 public enum ShippingStatus {
     UPDATING_FIRMWARE,

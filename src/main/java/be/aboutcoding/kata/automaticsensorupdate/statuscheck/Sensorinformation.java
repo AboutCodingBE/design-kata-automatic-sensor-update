@@ -1,6 +1,5 @@
-package be.aboutcoding.kata.automaticsensorupdate.statuscheck.infrastructure;
+package be.aboutcoding.kata.automaticsensorupdate.statuscheck;
 
-import be.aboutcoding.kata.automaticsensorupdate.statuscheck.domain.TS50X;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 

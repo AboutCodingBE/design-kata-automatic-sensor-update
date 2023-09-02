@@ -1,7 +1,5 @@
 package be.aboutcoding.kata.automaticsensorupdate.statuscheck;
 
-import be.aboutcoding.kata.automaticsensorupdate.statuscheck.infrastructure.SensorStatus;
-import be.aboutcoding.kata.automaticsensorupdate.statuscheck.logic.SensorStatusCheckProcess;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

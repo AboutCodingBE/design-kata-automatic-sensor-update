@@ -10,20 +10,18 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
-@RequestMapping("/sensor/status")
+@RequestMapping("/sensor/update")
 @Slf4j
-public class SensorStatusApi {
+public class SensorUpdateApi {
 
-    private SensorStatusCheckProcess statusCheck;
+    private CheckForUpdateProcess statusCheck;
 
-    public SensorStatusApi(SensorStatusCheckProcess statusCheck) {
+    public SensorUpdateApi(CheckForUpdateProcess statusCheck) {
         this.statusCheck = statusCheck;
     }
 
     @PostMapping
     public List<SensorStatus> getStatusFor(@RequestParam("file")MultipartFile file) {
-
-
         var sensors =  statusCheck.start(file);
         return sensors.stream()
                 .map(SensorStatus::from)

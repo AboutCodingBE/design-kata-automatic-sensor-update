@@ -6,12 +6,12 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @Component
-public class SensorStatusCheckProcess {
+public class CheckForUpdateProcess {
 
     private final SensorInformationClient sensorClient;
     private final TaskClient taskClient;
 
-    public SensorStatusCheckProcess(SensorInformationClient sensorClient, TaskClient taskClient) {
+    public CheckForUpdateProcess(SensorInformationClient sensorClient, TaskClient taskClient) {
         this.sensorClient = sensorClient;
         this.taskClient = taskClient;
     }

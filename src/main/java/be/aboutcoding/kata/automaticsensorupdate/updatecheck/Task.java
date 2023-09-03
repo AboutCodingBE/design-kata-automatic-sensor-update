@@ -1,4 +1,4 @@
-package be.aboutcoding.kata.automaticsensorupdate.statuscheck;
+package be.aboutcoding.kata.automaticsensorupdate.updatecheck;
 
 public record Task(Long id, TaskType type, String configurationFilename) {
 

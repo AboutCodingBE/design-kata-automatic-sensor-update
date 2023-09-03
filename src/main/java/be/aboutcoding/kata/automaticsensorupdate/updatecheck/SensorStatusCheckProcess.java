@@ -1,4 +1,4 @@
-package be.aboutcoding.kata.automaticsensorupdate.statuscheck;
+package be.aboutcoding.kata.automaticsensorupdate.updatecheck;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;

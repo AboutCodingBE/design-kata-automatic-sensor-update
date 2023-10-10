@@ -24,8 +24,6 @@ public class SensorStatusApi {
 
     @PostMapping
     public List<SensorStatus> getStatusFor(@RequestParam("file")MultipartFile file) {
-
-
         var sensors =  statusCheck.start(file);
         return sensors.stream()
                 .map(SensorStatus::from)

@@ -12,10 +12,12 @@ public class SensorStatusCheckProcess {
 
     private final SensorRepository sensorRepository;
     private final TaskRepository taskRepository;
+    private final UpdateVerification updateVerification;
 
-    public SensorStatusCheckProcess(SensorRepository sensorRepository, TaskRepository taskRepository) {
+    public SensorStatusCheckProcess(SensorRepository sensorRepository, TaskRepository taskRepository, UpdateVerification updateVerification) {
         this.sensorRepository = sensorRepository;
         this.taskRepository = taskRepository;
+        this.updateVerification = updateVerification;
     }
 
     public List<TS50X> start(MultipartFile file) {
@@ -26,21 +28,26 @@ public class SensorStatusCheckProcess {
         //Step 2: get actual sensor information for the following ids
         var targetSensors = sensorRepository.getSensorsWithIdIn(ids);
 
-
+        // for every sensor...
         for (var sensor : targetSensors) {
-            //Step 3: update the sensor firmware if necessary
-            if (!sensor.hasValidFirmware()) {
-                taskRepository.scheduleFirmwareUpdateFor(sensor.getId());
-                sensor.setStatus(ShippingStatus.UPDATING_FIRMWARE);
-            }
+            //Step 3: check if there are running tasks
+            updateVerification.forSensor(sensor);
+            if (!sensor.isUpdating()) {
 
-            //Step 4: update the sensor configuration if necessary or possible
-            else if (!sensor.isUpdatingFirmware() && !sensor.hasLatestConfiguration()) {
-                taskRepository.scheduleConfigurationUpdateFor(sensor.getId());
-                sensor.setStatus(ShippingStatus.UPDATING_CONFIGURATION);
-            }
-            else {
-                sensor.setStatus(ShippingStatus.READY);
+                //Step 4: update the sensor firmware if necessary
+                if (!sensor.hasValidFirmware()) {
+                    taskRepository.scheduleFirmwareUpdateFor(sensor.getId());
+                    sensor.setStatus(ShippingStatus.UPDATING_FIRMWARE);
+                }
+
+                //Step 5: update the sensor configuration if necessary or possible
+                else if (!sensor.isUpdatingFirmware() && !sensor.hasLatestConfiguration()) {
+                    taskRepository.scheduleConfigurationUpdateFor(sensor.getId());
+                    sensor.setStatus(ShippingStatus.UPDATING_CONFIGURATION);
+                }
+                else {
+                    sensor.setStatus(ShippingStatus.READY);
+                }
             }
         }
 

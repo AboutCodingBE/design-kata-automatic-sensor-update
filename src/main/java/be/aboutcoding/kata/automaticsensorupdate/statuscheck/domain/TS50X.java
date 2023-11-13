@@ -3,6 +3,9 @@ package be.aboutcoding.kata.automaticsensorupdate.statuscheck.domain;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TS50X {
 
     private static final String VALID_FIRMWARE_VERSION = "59.1.12Rev4";
@@ -11,22 +14,33 @@ public class TS50X {
     private final Long id;
     private final String currentFirmwareVersion;
     private final String currentConfiguration;
+    private final List<Long> taskQueue = new ArrayList<>();
     @Getter
     @Setter
-    private ShippingStatus status;
+    private ShippingStatus status = ShippingStatus.UPDATE_VALIDATION;
 
-    public TS50X(Long id, String firmwareVersion, String configuration) {
+    public TS50X(Long id, String firmwareVersion, String configuration, List<Long> taskQueue) {
         this.id = id;
         this.currentFirmwareVersion = firmwareVersion;
         this.currentConfiguration = configuration;
+        this.taskQueue.addAll(taskQueue);
     }
 
     public Long getId() {
         return this.id;
     }
 
+    public List<Long> getTaskQueue() {
+        return new ArrayList<>(this.taskQueue);
+    }
+
     public boolean isUpdatingFirmware() {
         return this.status.equals(ShippingStatus.UPDATING_FIRMWARE);
+    }
+
+    public boolean isUpdating() {
+        return this.status.equals(ShippingStatus.UPDATING_FIRMWARE) ||
+                this.status.equals(ShippingStatus.UPDATING_CONFIGURATION);
     }
 
     public boolean hasLatestConfiguration() {
@@ -40,6 +54,19 @@ public class TS50X {
             return currentVersion.isEqualOrLargerThan(validVersion);
         }
         return true;
+    }
+
+    public static boolean isTargetVersionValid(String taskVersionReference) {
+        if (!VALID_FIRMWARE_VERSION.equals(taskVersionReference)) {
+            var targetVersion = new SemanticVersion(taskVersionReference);
+            var validVersion = new SemanticVersion(VALID_FIRMWARE_VERSION);
+            return targetVersion.isEqualOrLargerThan(validVersion);
+        }
+        return true;
+    }
+
+    public static boolean isTargetConfiguration(String taskConfigurationReference) {
+        return TARGET_CONFIGURATION.equals(taskConfigurationReference);
     }
 
     private static class SemanticVersion {

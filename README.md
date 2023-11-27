@@ -16,3 +16,13 @@ schedules an update if it is not recent enough. When all of that checks out, sch
 of the request should be an overview of the current state of the sensors. Are they ready to be shipped? If not, then what
 needs to be done?
 
+## Some notes on the solution on this branch
+
+This solution is not the one I would have gone for. It is pretty close, but it has more interfaces than I would 
+normally use. Also, the decision to put everything in a folder named after the use case (`statuscheck`) would be something
+I wouldn't have done yet. There is only one use case in this code base, so there is no need yet to separate between 
+different use cases. 
+
+If a different use case would all of sudden need to be implemented, it is up to the developer to do the separation of 
+use cases at that time.
+

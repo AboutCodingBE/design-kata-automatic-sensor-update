@@ -1,5 +1,6 @@
 # Design Kata: Automated Sensor Updates
 This is a simple project intended as a practice design kata
+The solution on this branch is a demonstration of a poorly designed solution. 
 
 ## Problem:
 You are part of an IoT company shipping sensors to a vast amount of clients. These sensors, which are of type TS50X, 
@@ -16,13 +17,12 @@ schedules an update if it is not recent enough. When all of that checks out, sch
 of the request should be an overview of the current state of the sensors. Are they ready to be shipped? If not, then what
 needs to be done?
 
-## Some notes on the solution on this branch
+## Notes on this particular solution
 
-This solution is not the one I would have gone for. It is pretty close, but it has more interfaces than I would 
-normally use. Also, the decision to put everything in a folder named after the use case (`statuscheck`) would be something
-I wouldn't have done yet. There is only one use case in this code base, so there is no need yet to separate between 
-different use cases. 
+This solution is merely a example of how NOT to do it. It is an obvious example, yet it is something I have encountered 
+numerous times in the past. In this example, most of the process logic of the use case is stuffed in one file. This has 
+some consequences on understanding the solution and what it does, but also on the ability to change/extend the behaviour. 
 
-If a different use case would all of sudden need to be implemented, it is up to the developer to do the separation of 
-use cases at that time.
+Because there is no clear separation between the different steps in this process, changes on the axis of how can spread
+out and have unintended consequences. 
 

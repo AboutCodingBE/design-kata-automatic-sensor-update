@@ -43,7 +43,11 @@ The biggest problem with this version of the solution is that it is harder to ch
 * This code base is not fit to deal with variations of parts of the process that need to co-exist. The most obvious example
   of a variation would be a different type of sensor which we also need to validate, but the versioning is different. Or 
   the location of the actual information of this new type of sensor is a different API. It would be a pain to implement 
-  this in this version of the solution. 
+  this in this version of the solution. What is the chance that a variation pops up here? I would say that the chance is
+  quite big, if you look at the context of the problem. You are working for an IoT company that sells different types of
+  sensors. A conflict between custom configuration and factory made firmware is not that uncommon. So chances that there
+  might be a request for variations are much higher than if you would work for a company which for the moment only deals in one
+  type of sensor. 
 
 Here are some other, but smaller code smells: 
 
@@ -56,3 +60,6 @@ Here are some other, but smaller code smells:
   to the cognitive load. We should aim for a shallow component tree.
 
 
+We never know what change will come, how it will look like exactly or when it will happen. That is true. But a lot of these 
+problems could have been avoided by a minimum of software design. We don't have to future proof everything, but just a 
+clear separation of the different steps (or the multiple items on the axis of 'how') makes a world of difference. 

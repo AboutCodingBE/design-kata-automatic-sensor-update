@@ -19,8 +19,6 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Component
 @Slf4j
@@ -47,60 +45,52 @@ public class SensorService {
                      CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim());) {
 
             var csvRecords = csvParser.getRecords();
-
             for (CSVRecord csvRecord : csvRecords) {
                 ids.add(Long.parseLong(csvRecord.get("Id")));
             }
 
+            var sensors = new ArrayList<TS50X>(ids.size());
+            for (var sensorId : ids) {
+
+                var response = restTemplate.getForEntity("/sensor/{id}", Sensorinformation.class, sensorId);
+                if (response.getStatusCode().value() == 404) {
+                    log.error("The sensor with id {} could not be found", sensorId);
+                    continue;
+                }
+                else if (response.getStatusCode().is5xxServerError()) {
+                    log.error("The id {} return no sensor information because it triggered an error", sensorId);
+                    continue;
+                }
+
+                if (response.getBody() == null) {
+                    continue;
+                }
+
+                var sensorInformation = response.getBody();
+                TS50X sensor = null;
+                if (!hasValidFirmware(sensorInformation)) {
+                    sensor = taskService.scheduleTask(sensorInformation, true, null);
+                }
+
+                else if (!sensorInformation.currentConfiguration().equals(TARGET_CONFIGURATION)) {
+                    sensor = taskService.scheduleTask(sensorInformation, false, TARGET_CONFIGURATION);
+                }
+                else {
+                    sensor = Sensorinformation.toTS50X(sensorInformation);
+                    sensor.setStatus(ShippingStatus.READY);
+                }
+                sensors.add(sensor);
+            }
+            return sensors;
+
         } catch (IOException e) {
             throw new RuntimeException("fail to parse id file: " + e.getMessage());
         }
-
-        var targetSensors = ids.stream()
-                .map(this::getInformationFor)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .map(Sensorinformation::toTS50X)
-                .collect(Collectors.toList());
-
-
-        for (var sensor : targetSensors) {
-            if (!hasValidFirmware(sensor)) {
-                taskService.scheduleFirmwareUpdateFor(sensor.getId());
-                sensor.setStatus(ShippingStatus.UPDATING_FIRMWARE);
-            }
-
-            //Step 4: update the sensor configuration if necessary or possible
-            else if (!sensor.getStatus().equals(ShippingStatus.UPDATING_FIRMWARE) ||
-                    !sensor.getCurrentConfiguration().equals(TARGET_CONFIGURATION)) {
-                taskService.scheduleConfigurationUpdateFor(sensor.getId(), TARGET_CONFIGURATION);
-                sensor.setStatus(ShippingStatus.UPDATING_CONFIGURATION);
-            }
-            else {
-                sensor.setStatus(ShippingStatus.READY);
-            }
-        }
-
-        return targetSensors;
     }
 
-    private Optional<Sensorinformation> getInformationFor(Long id) {
-        var response = restTemplate.getForEntity("/sensor/{id}", Sensorinformation.class, id);
-        if (response.getStatusCode().value() == 404) {
-            log.error("The sensor with id {} could not be found", id);
-            return Optional.empty();
-        }
-        else if (response.getStatusCode().is5xxServerError()) {
-            log.error("The id {} return no sensor information because it triggered an error", id);
-            return Optional.empty();
-        }
-
-        return Optional.ofNullable(response.getBody());
-    }
-
-    private boolean hasValidFirmware(TS50X sensor) {
-        if (!VALID_FIRMWARE_VERSION.equals(sensor.getCurrentFirmwareVersion())) {
-            var currentVersion = new SemanticVersion(sensor.getCurrentFirmwareVersion());
+    private boolean hasValidFirmware(Sensorinformation sensorinformation) {
+        if (!VALID_FIRMWARE_VERSION.equals(sensorinformation.currentFirmware())) {
+            var currentVersion = new SemanticVersion(sensorinformation.currentFirmware());
             var validVersion = new SemanticVersion(VALID_FIRMWARE_VERSION);
             return currentVersion.isEqualOrLargerThan(validVersion);
         }

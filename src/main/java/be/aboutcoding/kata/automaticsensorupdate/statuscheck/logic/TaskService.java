@@ -1,5 +1,8 @@
 package be.aboutcoding.kata.automaticsensorupdate.statuscheck.logic;
 
+import be.aboutcoding.kata.automaticsensorupdate.statuscheck.domain.ShippingStatus;
+import be.aboutcoding.kata.automaticsensorupdate.statuscheck.domain.TS50X;
+import be.aboutcoding.kata.automaticsensorupdate.statuscheck.infrastructure.Sensorinformation;
 import be.aboutcoding.kata.automaticsensorupdate.statuscheck.infrastructure.Task;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,20 +20,24 @@ public class TaskService {
         this.restTemplate = templateBuilder.rootUri(baseUrl).build();
     }
 
-
-    public void scheduleFirmwareUpdateFor(Long id) {
-        var response = restTemplate.postForEntity("/task", Task.createFirmwareUpdateTaskFor(id), Long.class);
-        if (response.getStatusCode().is5xxServerError()) {
-            log.error("Creating a firmware update task for sensor with id {} failed", id);
+    public TS50X scheduleTask(Sensorinformation sensorinformation, boolean firmwareTask, String targetConfiguration) {
+        var sensor = Sensorinformation.toTS50X(sensorinformation);
+        if (firmwareTask) {
+            var response = restTemplate.postForEntity("/task", Task.createFirmwareUpdateTaskFor(sensor.getId()), Long.class);
+            if (response.getStatusCode().is5xxServerError()) {
+                log.error("Creating a firmware update task for sensor with id {} failed", sensor.getId());
+            }
+            sensor.setStatus(ShippingStatus.UPDATING_FIRMWARE);
         }
-    }
-
-
-    public void scheduleConfigurationUpdateFor(Long id, String targetConfiguration) {
-        var task = Task.createConfigUpdateTaskFor(id, targetConfiguration);
-        var response = restTemplate.postForEntity("/task", task, Long.class);
-        if (response.getStatusCode().is5xxServerError()) {
-            log.error("Creating a firmware update task for sensor with id {} failed", id);
+        else {
+            var task = Task.createConfigUpdateTaskFor(sensor.getId(), targetConfiguration);
+            var response = restTemplate.postForEntity("/task", task, Long.class);
+            if (response.getStatusCode().is5xxServerError()) {
+                log.error("Creating a firmware update task for sensor with id {} failed", sensor.getId());
+            }
+            sensor.setStatus(ShippingStatus.UPDATING_CONFIGURATION);
         }
+
+        return sensor;
     }
 }

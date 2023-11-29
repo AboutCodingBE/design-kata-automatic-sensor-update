@@ -1,7 +1,7 @@
 package be.aboutcoding.kata.automaticsensorupdate.statuscheck.logic;
 
 import be.aboutcoding.kata.automaticsensorupdate.statuscheck.domain.ShippingStatus;
-import be.aboutcoding.kata.automaticsensorupdate.statuscheck.domain.TS50X;
+import be.aboutcoding.kata.automaticsensorupdate.statuscheck.domain.Sensor;
 import be.aboutcoding.kata.automaticsensorupdate.statuscheck.infrastructure.Sensorinformation;
 import be.aboutcoding.kata.automaticsensorupdate.statuscheck.infrastructure.Task;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,7 @@ public class TaskService {
         this.restTemplate = templateBuilder.rootUri(baseUrl).build();
     }
 
-    public TS50X scheduleTask(Sensorinformation sensorinformation, boolean firmwareTask, String targetConfiguration) {
+    public Sensor scheduleTask(Sensorinformation sensorinformation, boolean firmwareTask, String targetConfiguration) {
         var sensor = Sensorinformation.toTS50X(sensorinformation);
         if (firmwareTask) {
             var response = restTemplate.postForEntity("/task", Task.createFirmwareUpdateTaskFor(sensor.getId()), Long.class);

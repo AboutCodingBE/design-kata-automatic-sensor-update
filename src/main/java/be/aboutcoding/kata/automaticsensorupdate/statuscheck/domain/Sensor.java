@@ -5,14 +5,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Data
-public class TS50X {
+public class Sensor {
 
     private final Long id;
     private final String currentFirmwareVersion;
     private final String currentConfiguration;
     private ShippingStatus status;
 
-    public TS50X(Long id, String firmwareVersion, String configuration) {
+    public Sensor(Long id, String firmwareVersion, String configuration) {
         this.id = id;
         this.currentFirmwareVersion = firmwareVersion;
         this.currentConfiguration = configuration;

@@ -1,6 +1,6 @@
 package be.aboutcoding.kata.automaticsensorupdate.statuscheck.infrastructure;
 
-import be.aboutcoding.kata.automaticsensorupdate.statuscheck.domain.TS50X;
+import be.aboutcoding.kata.automaticsensorupdate.statuscheck.domain.Sensor;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -11,7 +11,7 @@ public record Sensorinformation(@JsonProperty Long serial,
                                 @JsonProperty String currentConfiguration,
                                 @JsonProperty String  currentFirmware) {
 
-    public static TS50X toTS50X(Sensorinformation info) {
-        return new TS50X(info.serial, info.currentFirmware(), info.currentConfiguration());
+    public static Sensor toTS50X(Sensorinformation info) {
+        return new Sensor(info.serial, info.currentFirmware(), info.currentConfiguration());
     }
 }

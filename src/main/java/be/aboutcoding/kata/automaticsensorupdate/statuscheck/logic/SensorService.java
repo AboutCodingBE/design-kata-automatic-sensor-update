@@ -2,7 +2,7 @@ package be.aboutcoding.kata.automaticsensorupdate.statuscheck.logic;
 
 import be.aboutcoding.kata.automaticsensorupdate.statuscheck.domain.SemanticVersion;
 import be.aboutcoding.kata.automaticsensorupdate.statuscheck.domain.ShippingStatus;
-import be.aboutcoding.kata.automaticsensorupdate.statuscheck.domain.TS50X;
+import be.aboutcoding.kata.automaticsensorupdate.statuscheck.domain.Sensor;
 import be.aboutcoding.kata.automaticsensorupdate.statuscheck.infrastructure.Sensorinformation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVFormat;
@@ -37,7 +37,7 @@ public class SensorService {
         this.taskService = taskService;
     }
 
-    public List<TS50X> validateFirmwareOfSensors(MultipartFile file) {
+    public List<Sensor> validateFirmwareOfSensors(MultipartFile file) {
         var ids = new ArrayList<Long>();
 
         try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8));
@@ -49,7 +49,7 @@ public class SensorService {
                 ids.add(Long.parseLong(csvRecord.get("Id")));
             }
 
-            var sensors = new ArrayList<TS50X>(ids.size());
+            var sensors = new ArrayList<Sensor>(ids.size());
             for (var sensorId : ids) {
 
                 var response = restTemplate.getForEntity("/sensor/{id}", Sensorinformation.class, sensorId);
@@ -67,7 +67,7 @@ public class SensorService {
                 }
 
                 var sensorInformation = response.getBody();
-                TS50X sensor = null;
+                Sensor sensor = null;
                 if (!hasValidFirmware(sensorInformation)) {
                     sensor = taskService.scheduleTask(sensorInformation, true, null);
                 }

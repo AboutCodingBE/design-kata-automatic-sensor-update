@@ -1,7 +1,5 @@
 package be.aboutcoding.kata.automaticsensorupdate.statuscheck.infrastructure;
 
-import be.aboutcoding.kata.automaticsensorupdate.statuscheck.domain.TS50X;
-
 public record Task(Long id, TaskType type, String filename) {
 
     public static Task createConfigUpdateTaskFor(Long sensorId, String targetConfiguration) {

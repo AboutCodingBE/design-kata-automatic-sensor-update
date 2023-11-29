@@ -17,9 +17,4 @@ public class Sensor {
         this.currentFirmwareVersion = firmwareVersion;
         this.currentConfiguration = configuration;
     }
-
-    public Long getId() {
-        return this.id;
-    }
-
 }

@@ -1,28 +1,28 @@
 # Design Kata: Automated Sensor Updates
 This is a simple project intended as a practice design kata
 
-## Problem:
-You are part of an IoT company shipping sensors to a vast amount of clients. These sensors, which are of type TS50X, 
-have a firmware from their original manufacturer, which is pretty trustworthy. In your company these sensors have to be  
-configured so that they send valuable information which is of interest to the vast amount of clients.
+## This is a possible solution for the 2nd evolution 
 
-While testing the sensors with the latest configuration, people noticed a compatibility problem with older firmware. There 
-are new features which can be configured, but some older firmware doesn't know how to deal with those new features. 
-So the sensors only do a part of what they should be doing. We can’t have that, our company stands for high quality and 
-happy customers. So we need to prepare these sensors before shipping. 
+#### The original problem: 
 
-What we need is a web service which, given a list of sensor ids, will check if the firmware version is recent enough. It 
-schedules an update if it is not recent enough. When all of that checks out, schedule a configuration update. The result
-of the request should be an overview of the current state of the sensors. Are they ready to be shipped? If not, then what
-needs to be done?
+You have a list of sensor IDs and you want to know if these sensors are ready to be shipped or not. If not, you need to 
+schedule the next step in order to make it shippable. A sensor is ready to be shipped when its firmware is appropriate 
+and if the configuration is the latest configuration.
 
-## Some notes on the solution on this branch
+So for each sensor with its id in the list, you need to check if the firmware is appropriate so that the latest 
+configuration can run without problems. Currently, firmware with version `59.1.12Rev4` or higher is appropriate. Don’t forget 
+to schedule a task for the configuration and if needed, a task for to updte the firmware.
 
-This solution is not the one I would have gone for. It is pretty close, but it has more interfaces than I would 
-normally use. Also, the decision to put everything in a folder named after the use case (`statuscheck`) would be something
-I wouldn't have done yet. There is only one use case in this code base, so there is no need yet to separate between 
-different use cases. 
+You need to use the API of the original manufacturer to get the current sensor information and to schedule tasks such as 
+a firmware update and a configuration update.
 
-If a different use case would all of sudden need to be implemented, it is up to the developer to do the separation of 
-use cases at that time.
+##### But change is coming!
+
+The solution is a success! Therefore your managers would like to use this solution for other sensors as well, namely the 
+P100T. It turns out that these sensors have a different way of versioning firmware. They use dates followed by a release 
+number. For example: `2023-09-10R2`.
+
+You have to extend the solution so that we can give a list of P100T ids to check and update. We are lucky though: This 
+type of sensor is coming from the same manufacturer and so we can use the same API to get information about these sensors 
+and to schedule the updates.
 

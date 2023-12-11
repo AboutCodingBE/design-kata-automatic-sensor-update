@@ -1,5 +1,6 @@
 package be.aboutcoding.kata.automaticsensorupdate.statuscheck.logic;
 
+import be.aboutcoding.kata.automaticsensorupdate.statuscheck.domain.SensorToValidate;
 import be.aboutcoding.kata.automaticsensorupdate.statuscheck.domain.ShippingStatus;
 import be.aboutcoding.kata.automaticsensorupdate.statuscheck.domain.TS50X;
 import org.springframework.stereotype.Component;
@@ -18,7 +19,7 @@ public class SensorStatusCheckProcess {
         this.taskRepository = taskRepository;
     }
 
-    public List<TS50X> start(MultipartFile file) {
+    public List<SensorToValidate> start(MultipartFile file) {
         //Step 1: parse the ids from the file
         var parser = new IdParser();
         var ids = parser.apply(file);

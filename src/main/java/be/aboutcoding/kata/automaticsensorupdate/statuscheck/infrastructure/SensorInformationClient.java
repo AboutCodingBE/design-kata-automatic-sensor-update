@@ -1,5 +1,6 @@
 package be.aboutcoding.kata.automaticsensorupdate.statuscheck.infrastructure;
 
+import be.aboutcoding.kata.automaticsensorupdate.statuscheck.domain.SensorToValidate;
 import be.aboutcoding.kata.automaticsensorupdate.statuscheck.domain.TS50X;
 import be.aboutcoding.kata.automaticsensorupdate.statuscheck.logic.SensorRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -23,12 +24,14 @@ public class SensorInformationClient implements SensorRepository {
     }
 
     @Override
-    public List<TS50X> getSensorsWithIdIn(List<Long> ids) {
+    public List<SensorToValidate> getSensorsWithIdIn(List<Long> ids) {
         return ids.stream()
                 .map(this::getInformationFor)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .map(Sensorinformation::toTS50X)
+                .map(Sensorinformation::toSensor)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .collect(Collectors.toList());
     }
 

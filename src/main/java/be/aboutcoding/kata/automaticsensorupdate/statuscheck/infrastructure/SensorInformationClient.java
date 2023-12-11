@@ -1,5 +1,6 @@
 package be.aboutcoding.kata.automaticsensorupdate.statuscheck.infrastructure;
 
+import be.aboutcoding.kata.automaticsensorupdate.statuscheck.domain.FirmwareValidation;
 import be.aboutcoding.kata.automaticsensorupdate.statuscheck.domain.TS50X;
 import be.aboutcoding.kata.automaticsensorupdate.statuscheck.logic.SensorRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -23,12 +25,14 @@ public class SensorInformationClient implements SensorRepository {
     }
 
     @Override
-    public List<TS50X> getSensorsWithIdIn(List<Long> ids) {
+    public List<FirmwareValidation> getSensorsWithIdIn(List<Long> ids) {
         return ids.stream()
                 .map(this::getInformationFor)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .map(Sensorinformation::toTS50X)
+                .map(this::getFromType)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .collect(Collectors.toList());
     }
 
@@ -44,5 +48,17 @@ public class SensorInformationClient implements SensorRepository {
         }
 
         return Optional.ofNullable(response.getBody());
+    }
+
+    private Optional<FirmwareValidation> getFromType(Sensorinformation information) {
+        switch (information.type().toLowerCase()) {
+            case "ts50x":
+                return Optional.of(Sensorinformation.toTS50X(information));
+            case "p100t":
+                return Optional.of(Sensorinformation.toP100T(information));
+            default:
+                log.error("Sensor with id {} is of a type tha this not supported", information.type());
+                return Optional.empty();
+        }
     }
 }

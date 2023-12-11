@@ -3,7 +3,7 @@ package be.aboutcoding.kata.automaticsensorupdate.statuscheck.domain;
 import lombok.Getter;
 import lombok.Setter;
 
-public class TS50X {
+public class TS50X implements FirmwareValidation {
 
     private static final String VALID_FIRMWARE_VERSION = "59.1.12Rev4";
     public static final String TARGET_CONFIGURATION = "ts50x-20230811T10301211.cfg";
@@ -33,6 +33,7 @@ public class TS50X {
         return this.currentConfiguration.equals(TARGET_CONFIGURATION);
     }
 
+    @Override
     public boolean hasValidFirmware() {
         if (!VALID_FIRMWARE_VERSION.equals(currentFirmwareVersion)) {
             var currentVersion = new SemanticVersion(currentFirmwareVersion);

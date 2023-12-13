@@ -13,6 +13,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Even though we have pulled out the behaviour from the sensors into a separate abstraction, we still need
+ * to change the name of the sensor implementation, as one sensor class will represent all the different types
+ * of sensors now.
+ */
 @Component
 @Slf4j
 public class SensorInformationClient implements SensorRepository {

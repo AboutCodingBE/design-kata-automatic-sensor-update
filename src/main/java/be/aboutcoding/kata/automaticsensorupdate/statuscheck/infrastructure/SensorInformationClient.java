@@ -1,7 +1,7 @@
 package be.aboutcoding.kata.automaticsensorupdate.statuscheck.infrastructure;
 
-import be.aboutcoding.kata.automaticsensorupdate.statuscheck.domain.FirmwareValidation;
 import be.aboutcoding.kata.automaticsensorupdate.statuscheck.domain.TS50X;
+import be.aboutcoding.kata.automaticsensorupdate.statuscheck.logic.FirmwareValidation;
 import be.aboutcoding.kata.automaticsensorupdate.statuscheck.logic.SensorRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -25,7 +24,7 @@ public class SensorInformationClient implements SensorRepository {
     }
 
     @Override
-    public List<FirmwareValidation> getSensorsWithIdIn(List<Long> ids) {
+    public List<TS50X> getSensorsWithIdIn(List<Long> ids) {
         return ids.stream()
                 .map(this::getInformationFor)
                 .filter(Optional::isPresent)

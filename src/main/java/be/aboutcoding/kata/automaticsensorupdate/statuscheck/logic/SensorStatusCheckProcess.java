@@ -12,10 +12,12 @@ public class SensorStatusCheckProcess {
 
     private final SensorRepository sensorRepository;
     private final TaskRepository taskRepository;
+    private final FirmwareValidation firmwareValidation;
 
-    public SensorStatusCheckProcess(SensorRepository sensorRepository, TaskRepository taskRepository) {
+    public SensorStatusCheckProcess(SensorRepository sensorRepository, TaskRepository taskRepository, FirmwareValidation firmwareValidation) {
         this.sensorRepository = sensorRepository;
         this.taskRepository = taskRepository;
+        this.firmwareValidation = firmwareValidation;
     }
 
     public List<TS50X> start(MultipartFile file) {
@@ -29,7 +31,7 @@ public class SensorStatusCheckProcess {
 
         for (var sensor : targetSensors) {
             //Step 3: update the sensor firmware if necessary
-            if (!sensor.hasValidFirmware()) {
+            if (!firmwareValidation.hasValidFirmware(sensor.getCurrentFirmwareVersion())) {
                 taskRepository.scheduleFirmwareUpdateFor(sensor.getId());
                 sensor.setStatus(ShippingStatus.UPDATING_FIRMWARE);
             }

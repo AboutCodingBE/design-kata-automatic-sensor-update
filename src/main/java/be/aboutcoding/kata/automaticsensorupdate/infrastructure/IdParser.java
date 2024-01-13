@@ -1,4 +1,4 @@
-package be.aboutcoding.kata.automaticsensorupdate.logic;
+package be.aboutcoding.kata.automaticsensorupdate.infrastructure;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVFormat;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.function.Function;
 
 @Slf4j
-class IdParser implements Function<MultipartFile, List<Long>> {
+public class IdParser implements Function<MultipartFile, List<Long>> {
 
     @Override
     public List<Long> apply(MultipartFile file) {

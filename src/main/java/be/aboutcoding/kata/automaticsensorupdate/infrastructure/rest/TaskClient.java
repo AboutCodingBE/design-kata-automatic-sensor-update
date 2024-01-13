@@ -1,4 +1,4 @@
-package be.aboutcoding.kata.automaticsensorupdate.infrastructure;
+package be.aboutcoding.kata.automaticsensorupdate.infrastructure.rest;
 
 import be.aboutcoding.kata.automaticsensorupdate.logic.TaskRepository;
 import lombok.extern.slf4j.Slf4j;

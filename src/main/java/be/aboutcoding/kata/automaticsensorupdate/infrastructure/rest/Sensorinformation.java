@@ -1,4 +1,4 @@
-package be.aboutcoding.kata.automaticsensorupdate.infrastructure;
+package be.aboutcoding.kata.automaticsensorupdate.infrastructure.rest;
 
 import be.aboutcoding.kata.automaticsensorupdate.domain.TS50X;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

@@ -2,6 +2,7 @@ package be.aboutcoding.kata.automaticsensorupdate.logic;
 
 import be.aboutcoding.kata.automaticsensorupdate.domain.ShippingStatus;
 import be.aboutcoding.kata.automaticsensorupdate.domain.TS50X;
+import be.aboutcoding.kata.automaticsensorupdate.infrastructure.IdParser;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 

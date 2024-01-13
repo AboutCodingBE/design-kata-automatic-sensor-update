@@ -1,6 +1,7 @@
 package be.aboutcoding.kata.automaticsensorupdate;
 
-import be.aboutcoding.kata.automaticsensorupdate.infrastructure.SensorStatus;
+import be.aboutcoding.kata.automaticsensorupdate.infrastructure.rest.SensorStatus;
+import be.aboutcoding.kata.automaticsensorupdate.infrastructure.IdParser;
 import be.aboutcoding.kata.automaticsensorupdate.logic.SensorStatusCheckProcess;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +25,11 @@ public class SensorStatusApi {
 
     @PostMapping
     public List<SensorStatus> getStatusFor(@RequestParam("file")MultipartFile file) {
+
+        // Step 1: Get the actual input for our process to verify sensors
+        var parser = new IdParser();
+        var ids = parser.apply(file);
+
         var sensors =  statusCheck.start(file);
         return sensors.stream()
                 .map(SensorStatus::from)

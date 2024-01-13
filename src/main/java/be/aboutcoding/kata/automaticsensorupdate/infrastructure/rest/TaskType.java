@@ -1,4 +1,4 @@
-package be.aboutcoding.kata.automaticsensorupdate.infrastructure;
+package be.aboutcoding.kata.automaticsensorupdate.infrastructure.rest;
 
 import lombok.Getter;
 

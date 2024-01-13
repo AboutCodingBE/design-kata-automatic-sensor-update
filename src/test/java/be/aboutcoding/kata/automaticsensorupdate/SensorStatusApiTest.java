@@ -1,6 +1,7 @@
 package be.aboutcoding.kata.automaticsensorupdate;
 
 import be.aboutcoding.kata.automaticsensorupdate.logic.SensorStatusCheckProcess;
+import be.aboutcoding.kata.automaticsensorupdate.logic.StatusCheckProcess;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,7 +30,7 @@ class SensorStatusApiTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private SensorStatusCheckProcess statusCheckProcess;
+    private StatusCheckProcess statusCheckProcess;
 
     @InjectMocks
     private SensorStatusApi api;

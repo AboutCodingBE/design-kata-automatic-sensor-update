@@ -1,4 +1,4 @@
-package be.aboutcoding.kata.automaticsensorupdate.infrastructure.rest;
+package be.aboutcoding.kata.automaticsensorupdate.infrastructure.rest.sensor;
 
 import be.aboutcoding.kata.automaticsensorupdate.domain.TS50X;
 

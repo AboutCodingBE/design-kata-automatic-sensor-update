@@ -1,8 +1,8 @@
 package be.aboutcoding.kata.automaticsensorupdate;
 
-import be.aboutcoding.kata.automaticsensorupdate.infrastructure.rest.SensorStatus;
+import be.aboutcoding.kata.automaticsensorupdate.infrastructure.rest.sensor.SensorStatus;
 import be.aboutcoding.kata.automaticsensorupdate.infrastructure.IdParser;
-import be.aboutcoding.kata.automaticsensorupdate.logic.SensorStatusCheckProcess;
+import be.aboutcoding.kata.automaticsensorupdate.logic.StatusCheckProcess;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,9 +17,9 @@ import java.util.List;
 @Slf4j
 public class SensorStatusApi {
 
-    private SensorStatusCheckProcess statusCheck;
+    private StatusCheckProcess statusCheck;
 
-    public SensorStatusApi(SensorStatusCheckProcess statusCheck) {
+    public SensorStatusApi(StatusCheckProcess statusCheck) {
         this.statusCheck = statusCheck;
     }
 

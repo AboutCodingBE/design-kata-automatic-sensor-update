@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @Component
-public class SensorStatusCheckProcess {
+public class SensorStatusCheckProcess implements StatusCheckProcess {
 
     private final SensorRepository sensorRepository;
     private final TaskRepository taskRepository;

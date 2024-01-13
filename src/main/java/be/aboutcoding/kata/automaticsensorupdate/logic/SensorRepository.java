@@ -1,6 +1,6 @@
-package be.aboutcoding.kata.automaticsensorupdate.statuscheck.logic;
+package be.aboutcoding.kata.automaticsensorupdate.logic;
 
-import be.aboutcoding.kata.automaticsensorupdate.statuscheck.domain.TS50X;
+import be.aboutcoding.kata.automaticsensorupdate.domain.TS50X;
 
 import java.util.List;
 

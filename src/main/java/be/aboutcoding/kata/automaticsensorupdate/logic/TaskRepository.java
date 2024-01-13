@@ -1,4 +1,4 @@
-package be.aboutcoding.kata.automaticsensorupdate.statuscheck.logic;
+package be.aboutcoding.kata.automaticsensorupdate.logic;
 
 /**
  * A little overengineered for what the project really is. It serves as a demonstration of text book Dependency Inversion

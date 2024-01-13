@@ -19,10 +19,7 @@ public class SensorStatusCheckProcess {
         this.taskRepository = taskRepository;
     }
 
-    public List<TS50X> start(MultipartFile file) {
-        //Step 1: parse the ids from the file
-        var parser = new IdParser();
-        var ids = parser.apply(file);
+    public List<TS50X> start(List<Long> ids) {
 
         //Step 2: get actual sensor information for the following ids
         var targetSensors = sensorRepository.getSensorsWithIdIn(ids);

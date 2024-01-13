@@ -30,7 +30,7 @@ public class SensorStatusApi {
         var parser = new IdParser();
         var ids = parser.apply(file);
 
-        var sensors =  statusCheck.start(file);
+        var sensors =  statusCheck.start(ids);
         return sensors.stream()
                 .map(SensorStatus::from)
                 .toList();

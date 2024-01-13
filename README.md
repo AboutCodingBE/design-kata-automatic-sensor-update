@@ -27,6 +27,7 @@ needs to be done?
 
 - The version of the firmware that is actually compatible with the latest configuration is `59.1.12Rev4`
 - Any version equal or higher (for example: `59.2.12Rev0`) is valid. Anything lower is not.
+- The name of the latest configuration file is `ts50x-20230811T10301211.cfg`. 
 - Information about the sensors can be fetched by doing a REST api call: GET `www.mysensor.io/api/sensors/{id}`. 
 - The response type of fetching sensor information looks like this:
 ```json

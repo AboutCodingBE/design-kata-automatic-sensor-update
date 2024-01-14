@@ -64,4 +64,5 @@ In the case of a firmware update, you don't need to add a file id as the origina
 - This solution is aiming to be the textbook Clean Architecture solution.
 - In my opinion, this is not the best solution as it doesn't take context into account
 - The purpose of this branch is to demonstrate and to trigger discussion. 
+- This solution doesn't take any security in consideration (yet). This is on purpose, the focus is on simple design. 
 

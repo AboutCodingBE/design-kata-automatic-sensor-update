@@ -13,7 +13,7 @@ public class TS50X {
     private final String currentConfiguration;
     @Getter
     @Setter
-    private ShippingStatus status;
+    private ShippingStatus status = ShippingStatus.TO_BE_VERIFIED;
 
     public TS50X(Long id, String firmwareVersion, String configuration) {
         this.id = id;

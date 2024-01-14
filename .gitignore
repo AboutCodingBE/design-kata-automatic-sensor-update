@@ -34,3 +34,4 @@ build/
 
 ### Mac specific
 .DS_Store
+${project.build.directory}

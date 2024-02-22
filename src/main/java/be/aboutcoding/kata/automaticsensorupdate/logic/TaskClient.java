@@ -1,6 +1,6 @@
-package be.aboutcoding.kata.automaticsensorupdate.statuscheck.logic;
+package be.aboutcoding.kata.automaticsensorupdate.logic;
 
-import be.aboutcoding.kata.automaticsensorupdate.statuscheck.infrastructure.Task;
+import be.aboutcoding.kata.automaticsensorupdate.infrastructure.Task;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;

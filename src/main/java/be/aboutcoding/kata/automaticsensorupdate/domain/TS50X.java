@@ -11,6 +11,7 @@ public class TS50X {
     private final Long id;
     private final String currentFirmwareVersion;
     private final String currentConfiguration;
+
     @Getter
     @Setter
     private ShippingStatus status = ShippingStatus.TO_BE_VERIFIED;

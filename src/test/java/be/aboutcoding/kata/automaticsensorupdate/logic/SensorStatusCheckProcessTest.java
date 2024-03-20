@@ -7,7 +7,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.util.ResourceUtils;
 
+import java.io.FileInputStream;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -26,13 +30,14 @@ class SensorStatusCheckProcessTest {
     private SensorStatusCheckProcess statusCheckProcess;
 
     @Test
-    void should_schedule_a_firmware_update_if_firmware_is_outdated_have_correct_status() {
+    void should_schedule_a_firmware_update_if_firmware_is_outdated_have_correct_status() throws Exception {
         // given
+        var idFile = aMultipartFileOf("file", "examples/invalid-sensors.csv");
         var sensorId = 1L;
         when(sensorRepository.getSensorsWithIdIn(List.of(sensorId))).thenReturn(List.of(anOutdatedSensorWithId(1L)));
 
         // when
-        var result = statusCheckProcess.start(List.of(sensorId));
+        var result = statusCheckProcess.start(idFile);
 
         // then
         verify(taskRepository, times(1)).scheduleFirmwareUpdateFor(1L);
@@ -43,13 +48,14 @@ class SensorStatusCheckProcessTest {
     }
 
     @Test
-    void should_schedule_a_configuration_update_when_not_latest_configuration() {
+    void should_schedule_a_configuration_update_when_not_latest_configuration() throws Exception {
         // given
+        var idFile = aMultipartFileOf("file", "examples/invalid-sensors.csv");
         var sensorId = 1L;
         when(sensorRepository.getSensorsWithIdIn(List.of(sensorId))).thenReturn(List.of(aSensorWithoutLatestConfig(1L)));
 
         // when
-        var result = statusCheckProcess.start(List.of(sensorId));
+        var result = statusCheckProcess.start(idFile);
 
         // then
         verify(taskRepository, times(1)).scheduleConfigurationUpdateFor(1L);
@@ -60,13 +66,14 @@ class SensorStatusCheckProcessTest {
     }
 
     @Test
-    void should_correctly_handle_a_valid_sensor() {
+    void should_correctly_handle_a_valid_sensor() throws Exception {
         // given
+        var idFile = aMultipartFileOf("file", "examples/invalid-sensors.csv");
         var sensorId = 1L;
         when(sensorRepository.getSensorsWithIdIn(List.of(sensorId))).thenReturn(List.of(aValidSensor(1L)));
 
         // when
-        var result = statusCheckProcess.start(List.of(sensorId));
+        var result = statusCheckProcess.start(idFile);
 
         // then
         verifyNoInteractions(taskRepository);
@@ -74,6 +81,14 @@ class SensorStatusCheckProcessTest {
                 .hasSize(1)
                 .extracting(TS50X::getStatus)
                 .containsExactly(ShippingStatus.READY);
+    }
+
+    private MockMultipartFile aMultipartFileOf(String fileParameterName, String location) throws Exception {
+        var inputStream = new FileInputStream(ResourceUtils.getFile("classpath:" + location));
+        return new MockMultipartFile(fileParameterName,
+                "sensors.cvs",
+                MediaType.TEXT_PLAIN_VALUE,
+                inputStream);
     }
 
     private TS50X anOutdatedSensorWithId(Long id) {

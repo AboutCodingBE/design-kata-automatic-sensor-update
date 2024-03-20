@@ -66,3 +66,6 @@ In the case of a firmware update, you don't need to add a file id as the origina
 - The purpose of this branch is to demonstrate and to trigger discussion. 
 - This solution doesn't take any security in consideration (yet). This is on purpose, the focus is on simple design. 
 
+## Errors regarding java 21: 
+
+https://stackoverflow.com/questions/77171270/compilation-error-after-upgrading-to-jdk-21-nosuchfielderror-jcimport-does-n

@@ -26,11 +26,7 @@ public class SensorStatusApi {
     @PostMapping
     public List<SensorStatus> getStatusFor(@RequestParam("file")MultipartFile file) {
 
-        // Step 1: Get the actual input for our process to verify sensors
-        var parser = new IdParser();
-        var ids = parser.apply(file);
-
-        var sensors =  statusCheck.start(ids);
+        var sensors =  statusCheck.start(file);
         return sensors.stream()
                 .map(SensorStatus::from)
                 .toList();
